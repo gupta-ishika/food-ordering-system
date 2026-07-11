@@ -1,0 +1,39 @@
+from fastapi import FastAPI
+from fastapi.middleware.cors import CORSMiddleware
+from sqlalchemy import text
+from app.database.database import engine
+
+app = FastAPI()
+
+app.add_middleware(
+    CORSMiddleware,
+    allow_origins=[
+        "http://localhost:5173",
+    ],
+    allow_credentials=True,
+    allow_methods=["*"],
+    allow_headers=["*"],
+)
+
+
+@app.get("/")
+def root():
+    return {
+        "message": "Welcome to Food Ordering API"
+    }
+
+
+@app.get("/api/hello")
+def hello():
+    return {
+        "message": "Hello from FastAPI!"
+    }
+
+@app.get("/api/db-test")
+def test_database():
+    with engine.connect() as connection:
+        connection.execute(text("SELECT 1"))
+
+    return {
+        "message": "Database connected successfully!"
+    }
