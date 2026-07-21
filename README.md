@@ -61,6 +61,8 @@ This project is being built from scratch following industry-standard software de
 food-ordering-system/
 │
 ├── backend/
+│   ├── alembic/
+│   │   └── versions/
 │   ├── app/
 │   │   ├── api/
 │   │   ├── core/
@@ -84,6 +86,7 @@ food-ordering-system/
 │   │   ├── utils/
 │   │   └── main.py
 │   │
+│   ├── alembic.ini
 │   ├── requirements.txt
 │   └── .env.example
 │
@@ -186,18 +189,12 @@ Completed:
 - Enum: OrderStatus (Received, Preparing, Ready, Served, Cancelled)
 - DeclarativeBase setup with relationship mappings
 
-**Phase 2.5 – Database Setup & Migration** ⭐
+**Phase 2.5 – Database Setup & Migration** ✅
 
-Goal: Create the actual PostgreSQL database from the models.
-
-Upcoming:
-- Install and configure Alembic
-- Create the initial migration
-- Run the migration
-- Verify tables in PostgreSQL/DBeaver
-- Understand upgrade/downgrade migrations
-
-Deliverable: Database tables successfully created and managed with Alembic.
+Completed:
+- Alembic installed and configured (`alembic.ini` & `env.py`)
+- Initial database migration created (`initial_schema`)
+- PostgreSQL schema populated and managed with Alembic
 
 ---
 
@@ -205,7 +202,7 @@ Deliverable: Database tables successfully created and managed with Alembic.
 
 - [x] Phase 1 – Project Planning & Setup
 - [x] Phase 2 – Database Design
-- [ ] Phase 2.5 – Database Setup & Migration
+- [x] Phase 2.5 – Database Setup & Migration
 - [ ] Phase 3 – Authentication
 - [ ] Phase 4 – Restaurant Dashboard
 - [ ] Phase 5 – QR Code & Table Management
