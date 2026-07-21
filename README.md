@@ -65,7 +65,20 @@ food-ordering-system/
 │   │   ├── api/
 │   │   ├── core/
 │   │   ├── database/
+│   │   │   ├── __init__.py
+│   │   │   ├── base.py
+│   │   │   └── database.py
+│   │   ├── enums/
+│   │   │   ├── __init__.py
+│   │   │   └── order_status.py
 │   │   ├── models/
+│   │   │   ├── __init__.py
+│   │   │   ├── restaurant.py
+│   │   │   ├── category.py
+│   │   │   ├── food_item.py
+│   │   │   ├── table.py
+│   │   │   ├── order.py
+│   │   │   └── order_item.py
 │   │   ├── schemas/
 │   │   ├── services/
 │   │   ├── utils/
@@ -166,12 +179,33 @@ Completed:
 - PostgreSQL with Docker
 - SQLAlchemy database connection
 
+**Phase 2 – Database Design** ✅
+
+Completed:
+- SQLAlchemy models: Restaurant, Category, FoodItem, Table, Order, OrderItem
+- Enum: OrderStatus (Received, Preparing, Ready, Served, Cancelled)
+- DeclarativeBase setup with relationship mappings
+
+**Phase 2.5 – Database Setup & Migration** ⭐
+
+Goal: Create the actual PostgreSQL database from the models.
+
+Upcoming:
+- Install and configure Alembic
+- Create the initial migration
+- Run the migration
+- Verify tables in PostgreSQL/DBeaver
+- Understand upgrade/downgrade migrations
+
+Deliverable: Database tables successfully created and managed with Alembic.
+
 ---
 
 ## 📅 Roadmap
 
 - [x] Phase 1 – Project Planning & Setup
-- [ ] Phase 2 – Database Design
+- [x] Phase 2 – Database Design
+- [ ] Phase 2.5 – Database Setup & Migration
 - [ ] Phase 3 – Authentication
 - [ ] Phase 4 – Restaurant Dashboard
 - [ ] Phase 5 – QR Code & Table Management
