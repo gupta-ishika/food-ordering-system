@@ -42,6 +42,7 @@ This project is being built from scratch following industry-standard software de
 ### Backend
 - FastAPI
 - SQLAlchemy
+- Alembic
 
 ### Database
 - PostgreSQL (Docker)
@@ -65,7 +66,12 @@ food-ordering-system/
 │   │   └── versions/
 │   ├── app/
 │   │   ├── api/
+│   │   │   ├── __init__.py
+│   │   │   └── auth.py
 │   │   ├── core/
+│   │   │   ├── __init__.py
+│   │   │   ├── config.py
+│   │   │   └── security.py
 │   │   ├── database/
 │   │   │   ├── __init__.py
 │   │   │   ├── base.py
@@ -82,6 +88,8 @@ food-ordering-system/
 │   │   │   ├── order.py
 │   │   │   └── order_item.py
 │   │   ├── schemas/
+│   │   │   ├── __init__.py
+│   │   │   └── auth.py
 │   │   ├── services/
 │   │   ├── utils/
 │   │   └── main.py
@@ -196,6 +204,28 @@ Completed:
 - Initial database migration created (`initial_schema`)
 - PostgreSQL schema populated and managed with Alembic
 
+**Phase 3 – Restaurant Authentication** 🔄 *(In Progress)*
+
+Learning Objectives:
+- Password hashing
+- Why we never store plain passwords
+- JWT (JSON Web Tokens)
+- Authentication vs Authorization
+- Protected routes
+- Dependency Injection in FastAPI
+- Current authenticated user
+
+**Deliverable**:
+Restaurant dashboard accessible only after login.
+
+Completed:
+- `core/config.py` – Centralized env config (`SECRET_KEY`, `ALGORITHM`, `ACCESS_TOKEN_EXPIRE_MINUTES`)
+- `core/security.py` – Password hashing (bcrypt via passlib) & JWT create/decode (python-jose)
+- `schemas/auth.py` – Pydantic schemas: `RestaurantRegister`, `RestaurantLogin`, `Token`, `TokenData`
+- `api/auth.py` – Auth route scaffold
+- `hashed_password` field on the Restaurant model (plain passwords are never stored)
+- New dependencies: `passlib`, `python-jose`, `python-multipart`
+
 ---
 
 ## 📅 Roadmap
@@ -203,7 +233,7 @@ Completed:
 - [x] Phase 1 – Project Planning & Setup
 - [x] Phase 2 – Database Design
 - [x] Phase 2.5 – Database Setup & Migration
-- [ ] Phase 3 – Authentication
+- [ ] Phase 3 – Restaurant Authentication
 - [ ] Phase 4 – Restaurant Dashboard
 - [ ] Phase 5 – QR Code & Table Management
 - [ ] Phase 6 – Customer Menu
