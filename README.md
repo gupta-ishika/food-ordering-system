@@ -67,7 +67,8 @@ food-ordering-system/
 │   ├── app/
 │   │   ├── api/
 │   │   │   ├── __init__.py
-│   │   │   └── auth.py
+│   │   │   ├── auth.py
+│   │   │   └── deps.py
 │   │   ├── core/
 │   │   │   ├── __init__.py
 │   │   │   ├── config.py
@@ -204,7 +205,7 @@ Completed:
 - Initial database migration created (`initial_schema`)
 - PostgreSQL schema populated and managed with Alembic
 
-**Phase 3 – Restaurant Authentication** 🔄 *(In Progress)*
+**Phase 3 – Restaurant Authentication** ✅
 
 Learning Objectives:
 - Password hashing
@@ -219,12 +220,14 @@ Learning Objectives:
 Restaurant dashboard accessible only after login.
 
 Completed:
-- `core/config.py` – Centralized env config (`SECRET_KEY`, `ALGORITHM`, `ACCESS_TOKEN_EXPIRE_MINUTES`)
+- `core/config.py` – Centralized env config (`SECRET_KEY`, `ALGORITHM`, `ACCESS_TOKEN_EXPIRE_MINUTES`) with startup validation
 - `core/security.py` – Password hashing (bcrypt via passlib) & JWT create/decode (python-jose)
-- `schemas/auth.py` – Pydantic schemas: `RestaurantRegister`, `RestaurantLogin`, `Token`, `TokenData`
-- `api/auth.py` – Auth route scaffold
+- `schemas/auth.py` – Pydantic schemas: `RestaurantRegister`, `RestaurantLogin`, `Token`
+- `api/auth.py` – Register, login, and protected `/auth/me` endpoint
+- `api/deps.py` – `get_current_restaurant` dependency (JWT validation & user lookup)
 - `hashed_password` field on the Restaurant model (plain passwords are never stored)
-- New dependencies: `passlib`, `python-jose`, `python-multipart`
+- Removed duplicate `Base` class from `models/base.py` (single source of truth in `database/base.py`)
+- New dependencies: `passlib`, `python-jose`
 
 ---
 
@@ -233,7 +236,7 @@ Completed:
 - [x] Phase 1 – Project Planning & Setup
 - [x] Phase 2 – Database Design
 - [x] Phase 2.5 – Database Setup & Migration
-- [ ] Phase 3 – Restaurant Authentication
+- [x] Phase 3 – Restaurant Authentication
 - [ ] Phase 4 – Restaurant Dashboard
 - [ ] Phase 5 – QR Code & Table Management
 - [ ] Phase 6 – Customer Menu
