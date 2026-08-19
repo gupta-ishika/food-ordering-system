@@ -25,7 +25,7 @@ def get_current_restaurant(
         raise credentials_exception
 
     restaurant_id = payload.get("sub")
-
+  
     if restaurant_id is None:
         raise credentials_exception
 
