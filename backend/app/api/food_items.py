@@ -55,3 +55,131 @@ def create_food_item(
     db.refresh(new_food_item)
 
     return new_food_item
+
+@router.get(
+    "",
+    response_model=list[FoodItemResponse],
+)
+def get_food_items(
+    current_restaurant: Restaurant = Depends(get_current_restaurant),
+    db: Session = Depends(get_db),
+):
+    food_items = (
+        db.query(FoodItem)
+        .join(Category, FoodItem.category_id == Category.id)
+        .filter(Category.restaurant_id == current_restaurant.id)
+        .all()
+    )
+
+    return food_items
+
+@router.get(
+    "/{food_item_id}",
+    response_model=FoodItemResponse,
+)
+def get_food_item(
+    food_item_id: int,
+    current_restaurant: Restaurant = Depends(get_current_restaurant),
+    db: Session = Depends(get_db),
+):
+    food_item = (
+        db.query(FoodItem)
+        .join(Category, FoodItem.category_id == Category.id)
+        .filter(
+            FoodItem.id == food_item_id,
+            Category.restaurant_id == current_restaurant.id,
+        )
+        .first()
+    )
+
+    if food_item is None:
+        raise HTTPException(
+            status_code=status.HTTP_404_NOT_FOUND,
+            detail="Food item not found",
+        )
+
+    return food_item
+
+@router.put(
+    "/{food_item_id}",
+    response_model=FoodItemResponse,
+)
+def update_food_item(
+    food_item_id: int,
+    food_item_data: FoodItemCreate,
+    current_restaurant: Restaurant = Depends(get_current_restaurant),
+    db: Session = Depends(get_db),
+):
+    food_item = (
+        db.query(FoodItem)
+        .join(Category, FoodItem.category_id == Category.id)
+        .filter(
+            FoodItem.id == food_item_id,
+            Category.restaurant_id == current_restaurant.id,
+        )
+        .first()
+    )
+
+    if food_item is None:
+        raise HTTPException(
+            status_code=status.HTTP_404_NOT_FOUND,
+            detail="Food item not found",
+        )
+
+    category = (
+        db.query(Category)
+        .filter(
+            Category.id == food_item_data.category_id,
+            Category.restaurant_id == current_restaurant.id,
+        )
+        .first()
+    )
+
+    if category is None:
+        raise HTTPException(
+            status_code=status.HTTP_404_NOT_FOUND,
+            detail="Category not found",
+        )
+
+    food_item.category_id = food_item_data.category_id
+    food_item.name = food_item_data.name
+    food_item.description = food_item_data.description
+    food_item.price = food_item_data.price
+    food_item.image_url = food_item_data.image_url
+    food_item.is_available = food_item_data.is_available
+    food_item.is_veg = food_item_data.is_veg
+    food_item.display_order = food_item_data.display_order
+
+    db.commit()
+    db.refresh(food_item)
+
+    return food_item
+
+@router.delete(
+    "/{food_item_id}",
+    status_code=status.HTTP_204_NO_CONTENT,
+)
+def delete_food_item(
+    food_item_id: int,
+    current_restaurant: Restaurant = Depends(get_current_restaurant),
+    db: Session = Depends(get_db),
+):
+    food_item = (
+        db.query(FoodItem)
+        .join(Category, FoodItem.category_id == Category.id)
+        .filter(
+            FoodItem.id == food_item_id,
+            Category.restaurant_id == current_restaurant.id,
+        )
+        .first()
+    )
+
+    if food_item is None:
+        raise HTTPException(
+            status_code=status.HTTP_404_NOT_FOUND,
+            detail="Food item not found",
+        )
+
+    food_item.is_active = False
+
+    db.commit()

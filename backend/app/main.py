@@ -6,6 +6,8 @@ from app.database.database import engine
 from app.api.auth import router as auth_router
 from app.api.restaurants import router as restaurant_router
 from app.api.categories import router as category_router
+from app.api.food_items import router as food_item_router
+from app.api.tables import router as table_router
 
 app = FastAPI()
 
@@ -22,6 +24,8 @@ app.add_middleware(
 app.include_router(auth_router)
 app.include_router(restaurant_router)
 app.include_router(category_router)
+app.include_router(food_item_router)
+app.include_router(table_router)
 
 @app.get("/")
 def root():

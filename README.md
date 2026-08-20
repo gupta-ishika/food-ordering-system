@@ -63,12 +63,18 @@ food-ordering-system/
 │
 ├── backend/
 │   ├── alembic/
-│   │   └── versions/
+│   │   ├── versions/
+│   │   ├── env.py
+│   │   └── script.py.mako
 │   ├── app/
 │   │   ├── api/
 │   │   │   ├── __init__.py
 │   │   │   ├── auth.py
-│   │   │   └── deps.py
+│   │   │   ├── categories.py
+│   │   │   ├── deps.py
+│   │   │   ├── food_items.py
+│   │   │   ├── restaurants.py
+│   │   │   └── tables.py
 │   │   ├── core/
 │   │   │   ├── __init__.py
 │   │   │   ├── config.py
@@ -90,7 +96,11 @@ food-ordering-system/
 │   │   │   └── order_item.py
 │   │   ├── schemas/
 │   │   │   ├── __init__.py
-│   │   │   └── auth.py
+│   │   │   ├── auth.py
+│   │   │   ├── category.py
+│   │   │   ├── food_item.py
+│   │   │   ├── restaurant.py
+│   │   │   └── table.py
 │   │   ├── services/
 │   │   ├── utils/
 │   │   └── main.py
@@ -227,7 +237,32 @@ Completed:
 - `api/deps.py` – `get_current_restaurant` dependency (JWT validation & user lookup)
 - `hashed_password` field on the Restaurant model (plain passwords are never stored)
 - Removed duplicate `Base` class from `models/base.py` (single source of truth in `database/base.py`)
-- New dependencies: `passlib`, `python-jose`
+- New dependencies: `passlib`, `python-jose`, `python-multipart`, `pydantic[email]`
+
+**Phase 4 – Restaurant Dashboard (CRUD APIs)** ✅
+
+Learning Objectives:
+- RESTful API design (CRUD operations)
+- Pydantic response & request schemas (`from_attributes`)
+- Ownership-scoped queries (all data filtered by `current_restaurant`)
+- Soft-delete pattern (`is_active = False` instead of hard delete)
+- SQLAlchemy joins for cross-table ownership checks
+- Duplicate validation on create & update
+- Router organization and registration in FastAPI
+
+**Deliverable**:
+Protected APIs for managing the restaurant profile, categories, food items, and tables, with restaurant-level ownership isolation.
+
+Completed:
+- `api/restaurants.py` – GET & PUT `/restaurants/me` (view & update profile)
+- `api/categories.py` – Full CRUD for `/categories` (create, list, get, update, soft-delete)
+- `api/food_items.py` – Full CRUD for `/food-items` (create, list, get, update, soft-delete) with category ownership validation via JOIN
+- `api/tables.py` – Full CRUD for `/tables` (create, list, get, update, soft-delete) with duplicate table number check
+- `schemas/restaurant.py` – `RestaurantResponse` & `RestaurantUpdate` Pydantic schemas
+- `schemas/category.py` – `CategoryCreate` & `CategoryResponse` Pydantic schemas
+- `schemas/food_item.py` – `FoodItemCreate` & `FoodItemResponse` Pydantic schemas (with `Decimal` price, optional fields)
+- `schemas/table.py` – `TableCreate` & `TableResponse` Pydantic schemas
+- All routers registered in `main.py` with appropriate prefixes and tags
 
 ---
 
@@ -237,7 +272,7 @@ Completed:
 - [x] Phase 2 – Database Design
 - [x] Phase 2.5 – Database Setup & Migration
 - [x] Phase 3 – Restaurant Authentication
-- [ ] Phase 4 – Restaurant Dashboard
+- [x] Phase 4 – Restaurant Dashboard
 - [ ] Phase 5 – QR Code & Table Management
 - [ ] Phase 6 – Customer Menu
 - [ ] Phase 7 – Shopping Cart
