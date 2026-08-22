@@ -6,15 +6,16 @@ from app.database.database import get_db
 from app.models.restaurant import Restaurant
 from app.models.table import Table
 from app.schemas.table import TableCreate, TableResponse
+from app.services.qr_service import generate_qr_code
 
 router = APIRouter(
     prefix="/tables",
     tags=["Tables"],
 )
 
-
 @router.post(
     "",
+    response_model=TableResponse,
     status_code=status.HTTP_201_CREATED,
 )
 def create_table(
@@ -40,10 +41,17 @@ def create_table(
     new_table = Table(
         restaurant_id=current_restaurant.id,
         table_number=table_data.table_number,
-        qr_code_url=table_data.qr_code_url,
+        qr_code_url="temporary",
     )
 
     db.add(new_table)
+
+    # Get the database-generated ID
+    db.flush()
+
+    # Generate the actual QR code
+    new_table.qr_code_url = generate_qr_code(new_table.id)
+
     db.commit()
     db.refresh(new_table)
 
@@ -133,7 +141,6 @@ def update_table(
         )
 
     table.table_number = table_data.table_number
-    table.qr_code_url = table_data.qr_code_url
 
     db.commit()
     db.refresh(table)
@@ -167,3 +174,5 @@ def delete_table(
     table.is_active = False
 
     db.commit()
+
+

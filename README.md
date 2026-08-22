@@ -73,6 +73,7 @@ food-ordering-system/
 │   │   │   ├── categories.py
 │   │   │   ├── deps.py
 │   │   │   ├── food_items.py
+│   │   │   ├── public.py
 │   │   │   ├── restaurants.py
 │   │   │   └── tables.py
 │   │   ├── core/
@@ -88,12 +89,12 @@ food-ordering-system/
 │   │   │   └── order_status.py
 │   │   ├── models/
 │   │   │   ├── __init__.py
-│   │   │   ├── restaurant.py
 │   │   │   ├── category.py
 │   │   │   ├── food_item.py
-│   │   │   ├── table.py
 │   │   │   ├── order.py
-│   │   │   └── order_item.py
+│   │   │   ├── order_item.py
+│   │   │   ├── restaurant.py
+│   │   │   └── table.py
 │   │   ├── schemas/
 │   │   │   ├── __init__.py
 │   │   │   ├── auth.py
@@ -102,6 +103,8 @@ food-ordering-system/
 │   │   │   ├── restaurant.py
 │   │   │   └── table.py
 │   │   ├── services/
+│   │   │   ├── __init__.py
+│   │   │   └── qr_service.py
 │   │   ├── utils/
 │   │   └── main.py
 │   │
@@ -264,6 +267,24 @@ Completed:
 - `schemas/table.py` – `TableCreate` & `TableResponse` Pydantic schemas
 - All routers registered in `main.py` with appropriate prefixes and tags
 
+**Phase 5 – QR Code & Table Management** ✅
+
+Learning Objectives:
+- Automated QR code image generation
+- Serving static media assets in FastAPI (`StaticFiles`)
+- Public unauthenticated endpoints for customer menu access
+- Table ownership scoping and unique table number constraint handling
+
+**Deliverable**:
+Table CRUD management with automated QR code generation pointing to customer table menu URLs, static image serving, and public table lookup endpoint.
+
+Completed:
+- `services/qr_service.py` – Automated QR code image generation (`qrcode` library) encoding `{FRONTEND_URL}/menu/table/{table_id}`, saving PNG assets to `uploads/qr/`
+- `api/tables.py` – Full CRUD APIs for `/tables` with auto-generated QR code URL on creation and duplicate table number validation per restaurant
+- `api/public.py` – Public endpoint `GET /public/tables/{table_id}` returning table & active restaurant info for customer QR scans without authentication
+- `main.py` – Mounted `/uploads` directory for static file serving of QR PNGs and registered `table_router` and `public_router`
+- `requirements.txt` – Added `qrcode` and `pillow` dependencies
+
 ---
 
 ## 📅 Roadmap
@@ -273,7 +294,7 @@ Completed:
 - [x] Phase 2.5 – Database Setup & Migration
 - [x] Phase 3 – Restaurant Authentication
 - [x] Phase 4 – Restaurant Dashboard
-- [ ] Phase 5 – QR Code & Table Management
+- [x] Phase 5 – QR Code & Table Management
 - [ ] Phase 6 – Customer Menu
 - [ ] Phase 7 – Shopping Cart
 - [ ] Phase 8 – Order Management

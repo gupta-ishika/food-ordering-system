@@ -5,8 +5,6 @@ from pydantic import BaseModel
 
 class TableCreate(BaseModel):
     table_number: str
-    qr_code_url: str
-
 
 class TableResponse(BaseModel):
     id: int
